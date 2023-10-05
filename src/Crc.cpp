@@ -1,6 +1,7 @@
+#include "crc.h"
 #include <Arduino.h>
 
-word CRC16(byte *data, int size)
+word Crc16(const byte *data, int size)
 {
     word cr = 0xFFFF;
 
@@ -24,17 +25,18 @@ word CRC16(byte *data, int size)
 }
 
 // Helper function to validate CRC in message
-bool ValidateCRC(byte *message, int messageLength)
+bool ValidateCrc(const byte *message, int message_length)
 {
     // -2 because CRC is 2 bytes
-    byte withoutCRC[messageLength - 2];
-    memcpy(message, withoutCRC, messageLength - 2);
+    byte withoutCRC[message_length - 2];
+    memcpy(withoutCRC, message, message_length - 2);
 
-    unsigned short crc = CRC16(withoutCRC, messageLength - 2);
-    byte lowerWordCRC = crc & 0xFF;
-    byte upperWordCRC = (crc >> 8) & 0xFF;
+    word crc = Crc16(withoutCRC, message_length - 2);
+    byte lower_byte_crc = crc & 0xFF;
+    byte upper_byte_crc = (crc >> 8) & 0xFF;
 
-    if (message[messageLength - 1] == lowerWordCRC && message[messageLength] == upperWordCRC)
+    // Crc lower byte is second last byte and upper byte is last byte
+    if (message[message_length - 2] == lower_byte_crc && message[message_length - 1] == upper_byte_crc)
     {
         return true;
     }
@@ -42,17 +44,13 @@ bool ValidateCRC(byte *message, int messageLength)
 }
 
 // Helper function to add CRC to message
-void AddCRC(byte *message, int messageLength)
+void AddCrc(byte *message_without_crc, byte *message_with_crc, int message_length_without_crc)
 {
-    unsigned int crc = CRC16(message, messageLength);
-    word lowerWordCRC = crc & 0xFF;
-    word upperWordCRC = (crc >> 8) & 0xFF;
+    word crc = Crc16(message_without_crc, message_length_without_crc);
+    byte lower_byte_Crc = crc & 0xFF;
+    byte upper_byte_Crc = (crc >> 8) & 0xFF;
 
-    byte newMessage[messageLength + 2];
-    memcpy(message, newMessage, messageLength);
-    newMessage[messageLength] = lowerWordCRC;
-    newMessage[messageLength + 1] = upperWordCRC;
-
-    // TODO might not work like this
-    message = newMessage;
+    memcpy(message_with_crc, message_without_crc, message_length_without_crc);
+    message_with_crc[message_length_without_crc] = lower_byte_Crc;
+    message_with_crc[message_length_without_crc + 1] = upper_byte_Crc;
 }
