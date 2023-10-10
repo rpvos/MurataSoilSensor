@@ -1,15 +1,12 @@
 #include <unity.h>
 #include <Arduino.h>
-#include "test_crc.hpp"
-#include "test_murata_soil_sensor.hpp"
 #include "test_murata_soil_sensor_controller.hpp"
+#include "test_murata_soil_sensor.hpp"
+#include "test_crc.hpp"
 
-void setUp(void)
+void test_Framework(void)
 {
-}
-
-void tearDown(void)
-{
+    TEST_ASSERT_TRUE(true);
 }
 
 void setup()
@@ -19,9 +16,10 @@ void setup()
     delay(2000);
 
     UNITY_BEGIN();
-    TestCrc();
+    RUN_TEST(test_Framework);
+    RUN_TEST(test_StartMeasurement);
     TestMurataSoilSensor();
-    TestMurataSoilSensorController();
+    TestCrc();
     UNITY_END();
 }
 
