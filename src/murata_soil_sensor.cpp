@@ -21,7 +21,7 @@ namespace MurataSoilSensor
         return u12; // unsigned to signed conversion
     }
 
-    double CalculateTemp(word value)
+    double CalculateTemperature(word value)
     {
         //  Convert to 12 bit 2 complement value
         short dataSigned = Unsigned12BitToSigned16Bit(value);

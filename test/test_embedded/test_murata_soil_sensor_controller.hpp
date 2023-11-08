@@ -104,20 +104,27 @@ void test_ReadMeasurementData(void)
 
     {     // Test start measurement
         { // Setup
-            const uint8_t size = 7;
-            const byte querry[size] = {0x01, 0x03, 0x02, 0x00, 0x00, 0xB8, 0x44};
-
+            const uint8_t size = 19;
+            const byte querry[size] = {0x01, 0x03, 0x0E, 0x01, 0xC9, 0x00, 0x06, 0x01, 0x66, 0x01, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xE7, 0xF6};
             memory_stream->AddOutput(reinterpret_cast<const char *>(querry), size);
         }
 
         MurataSoilSensor::MeasurementData data;
         bool has_succeeded = controller->ReadMeasurementData(data);
         TEST_ASSERT_TRUE(has_succeeded);
-        // TODO check values of data
+
+        double temperature = MurataSoilSensor::CalculateTemperature(data.temperature);
+        double ec_bulk = MurataSoilSensor::CalculateECBulk(data.ec_bulk);
+        double vwc = MurataSoilSensor::CalculateVWC(data.vwc);
+        double ec_pore = MurataSoilSensor::CalculateECPore(data.ec_pore);
+        TEST_ASSERT_DOUBLE_WITHIN(0.285, 28.5, temperature);
+        TEST_ASSERT_DOUBLE_WITHIN(0.00006, 0.006, ec_bulk);
+        TEST_ASSERT_DOUBLE_WITHIN(0.408, 40.8, vwc);
+        TEST_ASSERT_DOUBLE_WITHIN(0.00001, 0.000, ec_pore);
 
         { // Check sent message
             const uint8_t size = 8;
-            const byte response[size] = {0x01, 0x03, 0x00, 0x0C, 0x00, 0x01, 0x44, 0x09};
+            const byte response[size] = {0x01, 0x03, 0x00, 0x16, 0x00, 0x07, 0xE5, 0xCC};
             memory_stream->ReadInput(buffer, buffer_size);
             TEST_ASSERT_EQUAL_HEX_ARRAY(response, buffer, size);
             memory_stream->ReadInput(buffer, buffer_size);

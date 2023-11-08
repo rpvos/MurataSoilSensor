@@ -43,7 +43,7 @@ namespace MurataSoilSensor
     };
 
     int16_t Unsigned12BitToSigned16Bit(word u12);
-    double CalculateTemp(word value);
+    double CalculateTemperature(word value);
     double CalculateECBulk(word value);
     double CalculateVWC(word value);
     double CalculateECPore(word value);
