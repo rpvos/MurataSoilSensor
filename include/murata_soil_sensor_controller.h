@@ -11,11 +11,11 @@ namespace MurataSoilSensorController
 
     namespace MessageSize
     {
-        const uint8_t kResponseErrorSize = 5;
-        const uint8_t kSetRegisterSize = 11;
-        const uint8_t kReadRegisterSize = 8;
-        const uint8_t kResponseSetRegisterSize = 8;
-        const uint8_t kResponseReadRegisterSize = 7;
+        const uint8_t kHeaderSize = 2;
+        const uint8_t kCrcSize = 2;
+        const uint8_t kAddressSize = 2;
+        const uint8_t kNumberOfRegistersSize = 2;
+        const uint8_t kNumberOfDataLengthSize = 1;
     } // namespace MessageSize
 
     class MurataSoilSensorController
@@ -25,16 +25,19 @@ namespace MurataSoilSensorController
 
         void Enable(void);
         void Disable(void);
-        bool WriteRegister(word address, word number_of_registers, word register_value);
-        bool ReadRegister(word address, word number_of_registers, word &register_value);
+        bool WriteRegister(const word address, const word number_of_registers, const word *register_values);
+        bool ReadRegister(const word address, const word number_of_registers, word *register_values);
         bool SetSlaveNumber(byte slave_number);
         bool StartMeasurement(void);
+        bool IsMeasurementFinished(bool &isFinished);
+        bool ReadMeasurementData(MurataSoilSensor::MeasurementData &measurement_data);
 
     private:
         RS485 *serial_;
         uint8_t enable_pin_;
         byte slave_number_;
 
+        void HandleError(const byte *response, const int response_length);
         void PrintError(byte error_code);
     };
 

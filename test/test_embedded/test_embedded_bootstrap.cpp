@@ -2,7 +2,6 @@
 #include <Arduino.h>
 #include "test_murata_soil_sensor_controller.hpp"
 #include "test_murata_soil_sensor.hpp"
-#include "test_crc.hpp"
 
 void test_Framework(void)
 {
@@ -18,8 +17,9 @@ void setup()
     UNITY_BEGIN();
     RUN_TEST(test_Framework);
     RUN_TEST(test_StartMeasurement);
+    RUN_TEST(test_IsMeasurementFinished);
+    RUN_TEST(test_ReadMeasurementData);
     TestMurataSoilSensor();
-    TestCrc();
     UNITY_END();
 }
 

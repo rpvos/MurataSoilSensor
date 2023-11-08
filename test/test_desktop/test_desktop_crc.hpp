@@ -1,4 +1,4 @@
-#include "crc.h"
+#include "crc16.h"
 #include <unity.h>
 #include <string.h>
 
@@ -20,7 +20,7 @@ void test_Crc16PerTestset(const uint8_t *testset, const size_t testset_size, boo
     uint8_t testset_with_modifications[testset_size - 2];
     memcpy(testset_with_modifications, testset, testset_size - 2);
 
-    uint16_t TestsetCrc = Crc::Crc16(testset_with_modifications, testset_size - 2);
+    uint16_t TestsetCrc = Crc::Crc16Modbus(testset_with_modifications, testset_size - 2);
     // It is calculated with upper byte then lower byte
     // And in the dataset it is lower byte then upper byte
     uint16_t RealCrc = testset[testset_size - 1] << 8 | testset[testset_size - 2];
@@ -49,11 +49,11 @@ void test_ValidateCrcPerTestset(const uint8_t *testset, const size_t testset_siz
 {
     if (outcome)
     {
-        TEST_ASSERT_TRUE_MESSAGE(Crc::ValidateCrc(testset, testset_size), "Validate did not return true");
+        TEST_ASSERT_TRUE_MESSAGE(Crc::ValidateCrcModbus(testset, testset_size), "Validate did not return true");
     }
     else
     {
-        TEST_ASSERT_FALSE_MESSAGE(Crc::ValidateCrc(testset, testset_size), "Validate did not return false");
+        TEST_ASSERT_FALSE_MESSAGE(Crc::ValidateCrcModbus(testset, testset_size), "Validate did not return false");
     }
 }
 
@@ -73,7 +73,7 @@ void test_AddCrcPerTestset(const uint8_t *testset, const size_t testset_size, bo
     memcpy(testset_without_crc, testset, testset_size - 2);
 
     uint8_t testset_with_crc[testset_size];
-    Crc::AddCrc(testset_without_crc, testset_with_crc, testset_size - 2);
+    Crc::AddCrcModbus(testset_without_crc, testset_with_crc, testset_size - 2);
 
     if (outcome)
     {
