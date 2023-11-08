@@ -60,11 +60,21 @@ namespace MurataSoilSensorController
 
     bool MurataSoilSensorController::ReadMeasurementData(MurataSoilSensor::MeasurementData &measurement_data)
     {
-        // TODO ReadMeasurementData
-        //  word value;
-        //  bool has_succeeded = ReadRegister(MurataSoilSensor::RegisterNumber::kRegisterTemperature, 0x0001, value);
-        //  isFinished = value;
-        //  return has_succeeded;
+        // 7 registers are needed to extract all sensor data starting from temperature register
+        word number_of_registers = 0x0007;
+        word *value = new word[number_of_registers];
+
+        bool has_succeeded = ReadRegister(MurataSoilSensor::RegisterNumber::kRegisterTemperature, number_of_registers, value);
+
+        if (has_succeeded)
+        {
+            measurement_data.temperature = value[0];
+            measurement_data.ec_bulk = value[1];
+            measurement_data.vwc = value[3];
+            measurement_data.ec_pore = value[6];
+        }
+
+        return has_succeeded;
     }
 
     bool MurataSoilSensorController::WriteRegister(const word address, const word number_of_registers, const word *register_values)

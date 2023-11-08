@@ -110,10 +110,10 @@ void test_ReadMeasurementData(void)
             memory_stream->AddOutput(reinterpret_cast<const char *>(querry), size);
         }
 
-        bool is_finished = false;
-        bool has_succeeded = controller->ReadMeasurementData(is_finished);
+        MurataSoilSensor::MeasurementData data;
+        bool has_succeeded = controller->ReadMeasurementData(data);
         TEST_ASSERT_TRUE(has_succeeded);
-        TEST_ASSERT_TRUE(is_finished);
+        // TODO check values of data
 
         { // Check sent message
             const uint8_t size = 8;
