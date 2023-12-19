@@ -4,6 +4,10 @@
 
 namespace MurataSoilSensor
 {
+    /**
+     * @brief Register locations of components of murata soil sensor
+     *
+     */
     namespace RegisterNumber
     {
         const word kRegisterSensorControl = 0x000A; // Start measurement
@@ -15,6 +19,10 @@ namespace MurataSoilSensor
         const word kRegisterSensorNumber = 0x0026;  // Number of sensor to set if more then 1 sensor is being used
     }
 
+    /**
+     * @brief Function codes used by murata soil sensor
+     *
+     */
     namespace FunctionCode
     {
         const byte kFunctionCodeReadNWords = 0x03;
@@ -22,6 +30,10 @@ namespace MurataSoilSensor
         const byte kFunctionCodeError = 0x80;
     }
 
+    /**
+     * @brief Error codes returned by murata soil sensor
+     *
+     */
     namespace ErrorCode
     {
         const byte kErrorCodeIllegalFunctionCode = 0x01;
@@ -33,20 +45,29 @@ namespace MurataSoilSensor
         const byte kErrorCodeI2CCommunicationError = 0x20;
     }
 
-    class MeasurementData
+    /**
+     * @brief Struct containing all values the murata soil sensor can measure
+     *
+     */
+    struct MeasurementData
     {
-    public:
         word temperature;
         word ec_bulk;
         word vwc;
         word ec_pore;
     };
 
-    int16_t Unsigned12BitToSigned16Bit(word u12);
-    double CalculateTemperature(word value);
-    double CalculateECBulk(word value);
-    double CalculateVWC(word value);
-    double CalculateECPore(word value);
+    /**
+     * @brief Helper function to convert word containing a signed 12 bit value to a signed 16 bit value
+     *
+     * @param u12 signed 12 bit value
+     * @return int16_t signed 16 bit value
+     */
+    [[nodiscard]] word Signed12BitToSigned16Bit(word u12);
+    [[nodiscard]] double CalculateTemperature(word value);
+    [[nodiscard]] double CalculateECBulk(word value);
+    [[nodiscard]] double CalculateVWC(word value);
+    [[nodiscard]] double CalculateECPore(word value);
 
 } // namespace MurataSoilSensor
 

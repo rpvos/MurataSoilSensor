@@ -9,7 +9,7 @@ namespace MurataSoilSensor
      * @param u12 unsigned 12 bit value
      * @return int16_t signed 16 bit value
      */
-    int16_t Unsigned12BitToSigned16Bit(word u12)
+    word Signed12BitToSigned16Bit(word u12)
     {
         u12 &= 0xFFF; // optionally, mask out potential clutter in upper bytes
 
@@ -24,11 +24,8 @@ namespace MurataSoilSensor
     double CalculateTemperature(word value)
     {
         //  Convert to 12 bit 2 complement value
-        short dataSigned = Unsigned12BitToSigned16Bit(value);
-        // tempValue_t tempData = {value}; // Other method to try
-        // double tempInC = tempData.value * 0.0625;
-        double tempInC = dataSigned * 0.0625;
-        return tempInC;
+        word dataSigned = Signed12BitToSigned16Bit(value);
+        return dataSigned * 0.0625;
     }
 
     double CalculateECBulk(word value)

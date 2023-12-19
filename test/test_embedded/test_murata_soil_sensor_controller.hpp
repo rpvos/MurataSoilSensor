@@ -35,8 +35,8 @@ void test_StartMeasurement(void)
             memory_stream->AddOutput(reinterpret_cast<const char *>(querry), size);
         }
 
-        bool has_succeeded = controller->StartMeasurement();
-        TEST_ASSERT_TRUE(has_succeeded);
+        MurataSoilSensorError error_code = controller->StartMeasurement();
+        TEST_ASSERT_TRUE(error_code == MurataSoilSensorError::kOk);
 
         { // Check sent message
             const uint8_t size = 11;
@@ -61,8 +61,8 @@ void test_IsMeasurementFinished(void)
         }
 
         bool is_finished = false;
-        bool has_succeeded = controller->IsMeasurementFinished(is_finished);
-        TEST_ASSERT_TRUE(has_succeeded);
+        MurataSoilSensorError error_code = controller->IsMeasurementFinished(is_finished);
+        TEST_ASSERT_TRUE(error_code == MurataSoilSensorError::kOk);
         TEST_ASSERT_TRUE(is_finished);
 
         { // Check sent message
@@ -84,8 +84,8 @@ void test_IsMeasurementFinished(void)
         }
 
         bool is_finished = false;
-        bool has_succeeded = controller->IsMeasurementFinished(is_finished);
-        TEST_ASSERT_TRUE(has_succeeded);
+        MurataSoilSensorError error_code = controller->IsMeasurementFinished(is_finished);
+        TEST_ASSERT_TRUE(error_code == MurataSoilSensorError::kOk);
         TEST_ASSERT_TRUE(is_finished);
 
         { // Check sent message
@@ -102,7 +102,7 @@ void test_IsMeasurementFinished(void)
 void test_ReadMeasurementData(void)
 {
 
-    {     // Test start measurement
+    {     // Test measurement data
         { // Setup
             const uint8_t size = 19;
             const byte querry[size] = {0x01, 0x03, 0x0E, 0x01, 0xC9, 0x00, 0x06, 0x01, 0x66, 0x01, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xE7, 0xF6};
@@ -110,8 +110,8 @@ void test_ReadMeasurementData(void)
         }
 
         MurataSoilSensor::MeasurementData data;
-        bool has_succeeded = controller->ReadMeasurementData(data);
-        TEST_ASSERT_TRUE(has_succeeded);
+        MurataSoilSensorError error_code = controller->ReadMeasurementData(data);
+        TEST_ASSERT_TRUE(error_code == MurataSoilSensorError::kOk);
 
         double temperature = MurataSoilSensor::CalculateTemperature(data.temperature);
         double ec_bulk = MurataSoilSensor::CalculateECBulk(data.ec_bulk);
