@@ -1,14 +1,15 @@
 #include <Arduino.h>
 #include <MAX485TTL.hpp>
+#include <murata_soil_sensor_helper.h>
 #include <murata_soil_sensor.h>
-#include <murata_soil_sensor_controller.h>
 
 const uint8_t kEnablePin = 4;
 
+const byte kCurrentSlaveNumber = 1;
 const byte kSlaveNumber = 1;
 
 RS485 *rs;
-MurataSoilSensorController::MurataSoilSensorController *controller;
+MurataSoilSensor::MurataSoilSensor *sensor;
 
 int state;
 
@@ -19,7 +20,7 @@ void setup()
   Serial1.begin(9600, SERIAL_8N1);
 
   rs = new RS485(2, 3, &Serial1);
-  controller = new MurataSoilSensorController::MurataSoilSensorController(rs, kEnablePin, kSlaveNumber);
+  sensor = new MurataSoilSensor::MurataSoilSensor(rs, kEnablePin, kCurrentSlaveNumber);
 
   state = 1;
 }
@@ -31,17 +32,17 @@ void loop()
   {
   case 0:
   {
-    response_code = controller->SetSlaveNumber(kSlaveNumber, true);
+    response_code = sensor->SetSlaveNumber(kSlaveNumber);
     if (response_code == MurataSoilSensorError::kOk)
     { // Create distance between state completes
-      Serial.println("Slave number is set via broadcast");
+      Serial.println("Slave number is set");
       state++;
     }
     break;
   }
   case 1:
   {
-    response_code = controller->StartMeasurement();
+    response_code = sensor->StartMeasurement();
     if (response_code == MurataSoilSensorError::kOk)
     {
       Serial.println("Measurement has started");
@@ -52,7 +53,7 @@ void loop()
   case 2:
   {
     bool isFinished = false;
-    response_code = controller->IsMeasurementFinished(isFinished);
+    response_code = sensor->IsMeasurementFinished(isFinished);
     // If register is succefully retrieved
     if (response_code == MurataSoilSensorError::kOk)
     {
@@ -70,18 +71,18 @@ void loop()
   }
   case 3:
   {
-    MurataSoilSensor::MeasurementData data;
-    response_code = controller->ReadMeasurementData(data);
+    MurataSoilSensorHelper::MeasurementData data;
+    response_code = sensor->ReadMeasurementData(data);
     if (response_code == MurataSoilSensorError::kOk)
     {
       Serial.print("Temperature:");
-      Serial.println(MurataSoilSensor::CalculateTemperature(data.temperature));
+      Serial.println(MurataSoilSensorHelper::CalculateTemperature(data.temperature));
       Serial.print("EC bulk:");
-      Serial.println(MurataSoilSensor::CalculateECBulk(data.ec_bulk));
+      Serial.println(MurataSoilSensorHelper::CalculateECBulk(data.ec_bulk));
       Serial.print("VWC:");
-      Serial.println(MurataSoilSensor::CalculateVWC(data.vwc));
+      Serial.println(MurataSoilSensorHelper::CalculateVWC(data.vwc));
       Serial.print("EC pore:");
-      Serial.println(MurataSoilSensor::CalculateECPore(data.ec_pore));
+      Serial.println(MurataSoilSensorHelper::CalculateECPore(data.ec_pore));
       state++;
     }
     break;
