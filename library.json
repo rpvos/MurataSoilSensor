@@ -23,7 +23,7 @@
     "homepage": "http://rpvos.nl",
     "dependencies": {
         "MAX485TTL": "https://github.com/rpvos/MAX485TTL.git",
-        "Modbus": "https://github.com/rpvos/Modbus.git",
+        "Modbus": "https://github.com/rpvos/Modbus.git"
     },
     "frameworks": [
         "Arduino"
