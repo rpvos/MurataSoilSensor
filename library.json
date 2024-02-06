@@ -1,0 +1,34 @@
+{
+    "name": "Murata soil sensor",
+    "version": "1.0.0",
+    "description": "Ease of use library for the sensor Murata soil sensor.",
+    "keywords": "",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rpvos/MurataSoilSensor.git"
+    },
+    "authors": [
+        {
+            "name": "Rik Vos",
+            "email": "Rik.Vos01@gmail.com",
+            "url": "http://rpvos.nl"
+        }
+    ],
+    "export": {
+        "exclude": [
+            "test/*"
+        ]
+    },
+    "license": "GNU 3",
+    "homepage": "http://rpvos.nl",
+    "dependencies": {
+        "MAX485TTL": "https://github.com/rpvos/MAX485TTL.git",
+        "Modbus": "https://github.com/rpvos/Modbus.git",
+    },
+    "frameworks": [
+        "Arduino"
+    ],
+    "platforms": [
+        "atmelavr"
+    ]
+}
