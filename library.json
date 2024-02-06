@@ -30,5 +30,10 @@
     ],
     "platforms": [
         "atmelavr"
+    ],
+    "headers": [
+        "murata_soil_sensor_errors.h",
+        "murata_soil_sensor_helper.h",
+        "murata_soil_sensor.h"
     ]
 }
