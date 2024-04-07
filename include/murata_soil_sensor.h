@@ -3,7 +3,7 @@
 #include "murata_soil_sensor_errors.h"
 #include "murata_soil_sensor_helper.h"
 #include <max485ttl.hpp>
-#include "modbus.h"
+#include "modbus.hpp"
 
 namespace MurataSoilSensor
 {
@@ -33,7 +33,7 @@ namespace MurataSoilSensor
         const uint8_t kNumberOfDataLengthSize = 1;
 
         RS485 *serial_;
-        ModbusSlave *modbus_;
+        ModbusSlave modbus_ = ModbusSlave(0, 0);
         uint8_t enable_pin_;
 
         void HandleError(const byte *response, const int response_length);

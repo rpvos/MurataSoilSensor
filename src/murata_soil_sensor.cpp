@@ -1,4 +1,5 @@
 #include "murata_soil_sensor.h"
+#include "crc16.hpp"
 
 namespace MurataSoilSensor
 {
@@ -8,8 +9,7 @@ namespace MurataSoilSensor
         this->serial_ = serial;
         this->enable_pin_ = enable_pin;
 
-        this->modbus_ = new ModbusSlave(slave_number, 0);
-
+        modbus_.SetSlaveId(slave_number);
         pinMode(enable_pin, OUTPUT);
         Enable();
     }
@@ -39,7 +39,7 @@ namespace MurataSoilSensor
         MurataSoilSensorError response_code = WriteRegister(MurataSoilSensorHelper::RegisterNumber::kRegisterSensorNumber, 0x0001, &slave_number_word, broadcast);
         if (response_code == MurataSoilSensorError::kOk)
         {
-            this->modbus_->SetSlaveId(slave_number);
+            this->modbus_.SetSlaveId(slave_number);
         }
 
         return response_code;
@@ -83,9 +83,9 @@ namespace MurataSoilSensor
         const byte function_code = MurataSoilSensorHelper::FunctionCode::kFunctionCodeWriteNWords;
 
         // Fill const elements of message with values
-        size_t message_length = modbus_->GetWriteMessageLength(number_of_registers);
+        size_t message_length = modbus_.GetWriteMessageLength(number_of_registers);
         byte message[message_length];
-        modbus_->ConstructWriteMessage(message, function_code, address, number_of_registers, register_values, broadcast);
+        modbus_.ConstructWriteMessage(message, function_code, address, number_of_registers, register_values, broadcast);
 
         Serial.print("Sent message:");
         for (size_t i = 0; i < message_length; i++)
@@ -120,7 +120,7 @@ namespace MurataSoilSensor
             buffer[i] = serial_->read();
         }
 
-        if (modbus_->ValidateWriteResponse(buffer, function_code, address, number_of_registers, broadcast))
+        if (modbus_.ValidateWriteResponse(buffer, function_code, address, number_of_registers, broadcast))
         {
             return MurataSoilSensorError::kOk;
         }
@@ -153,9 +153,9 @@ namespace MurataSoilSensor
         const byte function_code = MurataSoilSensorHelper::FunctionCode::kFunctionCodeReadNWords;
 
         // Fill const elements of message with values
-        size_t message_length = modbus_->GetReadMessageLength();
+        size_t message_length = modbus_.GetReadMessageLength();
         byte message[message_length];
-        modbus_->ConstructReadMessage(message, function_code, address, number_of_registers);
+        modbus_.ConstructReadMessage(message, function_code, address, number_of_registers);
 
         serial_->SetMode(OUTPUT);
         serial_->write(message, message_length);
@@ -173,10 +173,10 @@ namespace MurataSoilSensor
             buffer[i] = serial_->read();
         }
 
-        if (modbus_->ValidateReadResponse(buffer, function_code, number_of_registers))
+        if (modbus_.ValidateReadResponse(buffer, function_code, number_of_registers))
         {
 
-            modbus_->GetReadRegister(buffer, number_of_registers, register_values);
+            modbus_.GetReadRegister(buffer, number_of_registers, register_values);
             return MurataSoilSensorError::kOk;
         }
 
@@ -188,7 +188,8 @@ namespace MurataSoilSensor
     {
         if (response[1] == MurataSoilSensorHelper::FunctionCode::kFunctionCodeError)
         {
-            if (Crc::ValidateCrcModbus(response, response_length, false))
+
+            if (Crc::ValidateCrc16Modbus(response, response_length, false))
             {
                 Serial.println("Crc of error not correct");
                 return;
@@ -196,7 +197,7 @@ namespace MurataSoilSensor
 
             byte error_slave_number = response[0];
             // Check if slave number is correct
-            if (modbus_->GetSlaveId() != error_slave_number)
+            if (modbus_.GetSlaveId() != error_slave_number)
             {
                 // When the sensor responds with a diffrent slave number use that for following messages
                 Serial.print("Slave number is incorrect should be: ");
