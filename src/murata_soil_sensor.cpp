@@ -63,7 +63,7 @@ namespace MurataSoilSensor
     {
         // 7 registers are needed to extract all sensor data starting from temperature register
         word number_of_registers = 0x0007;
-        word *value = new word[number_of_registers];
+        word value[number_of_registers];
 
         MurataSoilSensorError response_code = ReadRegister(MurataSoilSensorHelper::RegisterNumber::kRegisterTemperature, number_of_registers, value);
 
