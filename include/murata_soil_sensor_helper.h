@@ -10,13 +10,13 @@ namespace MurataSoilSensorHelper
      */
     namespace RegisterNumber
     {
-        const word kRegisterSensorControl = 0x000A; // Start measurement
-        const word kRegisterSensorState = 0x000C;   // State of measurement
-        const word kRegisterTemperature = 0x0016;   // Soil temperature
-        const word kRegisterEcBulk = 0x0018;        // Ions in the water
-        const word kRegisterVWC = 0x001C;           // Volumetric Water Content
-        const word kRegisterEcPore = 0x0022;        // Ions in the soil
-        const word kRegisterSensorNumber = 0x0026;  // Number of sensor to set if more then 1 sensor is being used
+        static const word kRegisterSensorControl = 0x000A; // Start measurement
+        static const word kRegisterSensorState = 0x000C;   // State of measurement
+        static const word kRegisterTemperature = 0x0016;   // Soil temperature
+        static const word kRegisterEcBulk = 0x0018;        // Ions in the water
+        static const word kRegisterVWC = 0x001C;           // Volumetric Water Content
+        static const word kRegisterEcPore = 0x0022;        // Ions in the soil
+        static const word kRegisterSensorNumber = 0x0026;  // Number of sensor to set if more then 1 sensor is being used
     }
 
     /**
@@ -25,9 +25,9 @@ namespace MurataSoilSensorHelper
      */
     namespace FunctionCode
     {
-        const byte kFunctionCodeReadNWords = 0x03;
-        const byte kFunctionCodeWriteNWords = 0x10;
-        const byte kFunctionCodeError = 0x80;
+        static const byte kFunctionCodeReadNWords = 0x03;
+        static const byte kFunctionCodeWriteNWords = 0x10;
+        static const byte kFunctionCodeError = 0x80;
     }
 
     /**
@@ -36,13 +36,13 @@ namespace MurataSoilSensorHelper
      */
     namespace ErrorCode
     {
-        const byte kErrorCodeIllegalFunctionCode = 0x01;
-        const byte kErrorCodeIllegalStartAddress = 0x02;
-        const byte kErrorCodeIllegalProtocolOrFormat = 0x03;
-        const byte kErrorCodeCRC16Error = 0x05;
-        const byte kErrorCodeSensorIsUnderMeasurement = 0x06;
-        const byte kErrorCodeFailedToWriteToRegister = 0x10;
-        const byte kErrorCodeI2CCommunicationError = 0x20;
+        static const byte kErrorCodeIllegalFunctionCode = 0x01;
+        static const byte kErrorCodeIllegalStartAddress = 0x02;
+        static const byte kErrorCodeIllegalProtocolOrFormat = 0x03;
+        static const byte kErrorCodeCRC16Error = 0x05;
+        static const byte kErrorCodeSensorIsUnderMeasurement = 0x06;
+        static const byte kErrorCodeFailedToWriteToRegister = 0x10;
+        static const byte kErrorCodeI2CCommunicationError = 0x20;
     }
 
     /**

@@ -1,5 +1,5 @@
 #include "murata_soil_sensor.h"
-#include "crc16.hpp"
+#include <crc16.hpp>
 
 namespace MurataSoilSensor
 {

@@ -3,7 +3,7 @@
 #include "murata_soil_sensor_errors.h"
 #include "murata_soil_sensor_helper.h"
 #include <max485ttl.hpp>
-#include "modbus.hpp"
+#include <modbus.hpp>
 
 namespace MurataSoilSensor
 {
