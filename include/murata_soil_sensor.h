@@ -7,6 +7,15 @@
 
 namespace MurataSoilSensor
 {
+    // Define used to shift by byte size
+    static const uint8_t kSizeOfByte = 8;
+    // Message sizes used to calculate size of buffer for message
+    static const uint8_t kHeaderSize = 2;
+    static const uint8_t kCrcSize = 2;
+    static const uint8_t kAddressSize = 2;
+    static const uint8_t kNumberOfRegistersSize = 2;
+    static const uint8_t kNumberOfDataLengthSize = 1;
+
     class MurataSoilSensor
     {
     public:
@@ -23,15 +32,6 @@ namespace MurataSoilSensor
         [[nodiscard]] MurataSoilSensorError ReadMeasurementData(MurataSoilSensorHelper::MeasurementData &measurement_data);
 
     private:
-        // Define used to shift by byte size
-        const uint8_t kSizeOfByte = 8;
-        // Message sizes used to calculate size of buffer for message
-        const uint8_t kHeaderSize = 2;
-        const uint8_t kCrcSize = 2;
-        const uint8_t kAddressSize = 2;
-        const uint8_t kNumberOfRegistersSize = 2;
-        const uint8_t kNumberOfDataLengthSize = 1;
-
         RS485 *serial_;
         ModbusSlave modbus_ = ModbusSlave(0, 0);
         uint8_t enable_pin_;

@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <MAX485TTL.hpp>
+#include <max485ttl.hpp>
 #include <murata_soil_sensor_helper.h>
 #include <murata_soil_sensor.h>
 
