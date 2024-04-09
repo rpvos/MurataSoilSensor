@@ -125,23 +125,24 @@ namespace MurataSoilSensor
 
         HandleError(buffer, response_length);
 
-        // Print debug info of message
-        Serial.print("Message length was: ");
-        Serial.println(response_length);
-        // If length is smaller then 2 no function code was given
-        if (response_length > 1)
-        {
-            Serial.print("Function code was: 0x");
-            Serial.println(function_code, HEX);
-        }
-        // Print message in hex
-        Serial.print("Message was: 0x");
-        for (int i = 0; i < response_length; i++)
-        {
-            Serial.print(buffer[i], HEX);
-            Serial.print(' ');
-        }
-        Serial.println();
+        // TODO: remove
+        //  // Print debug info of message
+        //  Serial.print("Message length was: ");
+        //  Serial.println(response_length);
+        //  // If length is smaller then 2 no function code was given
+        //  if (response_length > 1)
+        //  {
+        //      Serial.print("Function code was: 0x");
+        //      Serial.println(function_code, HEX);
+        //  }
+        //  // Print message in hex
+        //  Serial.print("Message was: 0x");
+        //  for (int i = 0; i < response_length; i++)
+        //  {
+        //      Serial.print(buffer[i], HEX);
+        //      Serial.print(' ');
+        //  }
+        //  Serial.println();
 
         return MurataSoilSensorError::kIncorrectReturnMessage;
     }
