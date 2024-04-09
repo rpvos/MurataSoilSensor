@@ -3,7 +3,8 @@
 #include <murata_soil_sensor_helper.h>
 #include <murata_soil_sensor.h>
 
-const uint8_t kEnablePin = 4;
+const uint8_t kRs485EnablePin = 7;
+const uint8_t kSoilSensorEnablePin = 6;
 
 const byte kCurrentSlaveNumber = 1;
 const byte kSlaveNumber = 1;
@@ -17,10 +18,10 @@ void setup()
 {
   Serial.begin(9600);
   // Serial using 8 bits, No parity and 1 stop bit
-  Serial1.begin(9600, SERIAL_8N1);
+  Serial2.begin(9600, SERIAL_8N1);
 
-  rs = new RS485(2, 3, &Serial1);
-  sensor = new MurataSoilSensor::MurataSoilSensor(rs, kEnablePin, kCurrentSlaveNumber);
+  rs = new RS485(kRs485EnablePin, kRs485EnablePin, &Serial2);
+  sensor = new MurataSoilSensor::MurataSoilSensor(rs, kSoilSensorEnablePin, kCurrentSlaveNumber);
 
   state = 1;
 }

@@ -1,6 +1,10 @@
 #include "murata_soil_sensor.h"
 #include <crc16.hpp>
 
+#ifndef kDelayTimeAfterSwitch
+#define kDelayTimeAfterSwitch 10
+#endif
+
 namespace MurataSoilSensor
 {
 
@@ -87,14 +91,8 @@ namespace MurataSoilSensor
         byte message[message_length];
         modbus_.ConstructWriteMessage(message, function_code, address, number_of_registers, register_values, broadcast);
 
-        Serial.print("Sent message:");
-        for (size_t i = 0; i < message_length; i++)
-        {
-            Serial.print(message[i], HEX);
-        }
-        Serial.println();
-
         serial_->SetMode(OUTPUT);
+        delay(kDelayTimeAfterSwitch);
         serial_->write(message, message_length);
         serial_->flush();
         serial_->SetMode(INPUT);
@@ -158,6 +156,7 @@ namespace MurataSoilSensor
         modbus_.ConstructReadMessage(message, function_code, address, number_of_registers);
 
         serial_->SetMode(OUTPUT);
+        delay(kDelayTimeAfterSwitch);
         serial_->write(message, message_length);
         serial_->flush();
         serial_->SetMode(INPUT);
